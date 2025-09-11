@@ -1,4 +1,4 @@
-project: jdk-21
+project: jdk-17
 
 backends:
   craft:
@@ -11,7 +11,7 @@ suites:
   spread/general/:
     environment:
       ROCK: jdk:latest
-      VERSION: 21.0
+      VERSION: 17.0
     summary: General integration tests
 
     prepare: |
