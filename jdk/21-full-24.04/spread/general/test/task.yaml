@@ -1,0 +1,4 @@
+summary: test the 'my-rock-name' project
+
+execute: |
+  docker run ${ROCK} exec java --version | grep -q "${VERSION}"
