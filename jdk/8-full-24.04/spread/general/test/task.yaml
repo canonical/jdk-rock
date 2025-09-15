@@ -1,4 +1,4 @@
-summary: test the 'my-rock-name' project
+summary: openjdk smoke test
 
 execute: |
   docker run ${ROCK} exec java -version 2>&1 | grep -q "${VERSION}"
