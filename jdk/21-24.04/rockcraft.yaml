@@ -1,0 +1,47 @@
+name: jdk
+
+base: bare
+build-base: ubuntu@24.04
+
+version: '21-24.04'
+summary: Chiselled OpenJDK 21 on Ubuntu 24.04
+description: |
+  Chiselled OpenJDK 21 rock
+platforms:
+  amd64:
+  arm64:
+
+environment:
+  JAVA_HOME: /usr/lib/jvm/java-21-openjdk-${CRAFT_ARCH_BUILD_FOR}
+
+run-user: _daemon_
+
+parts:
+  openjdk:
+    plugin: nil
+    override-build: |
+      chisel cut --root ${CRAFT_PART_INSTALL}/ \
+        openjdk-21-jdk-headless_standard \
+        openjdk-21-jdk-headless_modules \
+        openjdk-21-jdk-headless_headers \
+        openjdk-21-jdk-headless_debug-headers \
+        base-files_chisel
+
+      JAVA_HOME=usr/lib/jvm/java-21-openjdk-${CRAFT_ARCH_BUILD_FOR}
+      cd ${CRAFT_PART_INSTALL}
+      mkdir -p usr/bin
+      for tool in `ls ${CRAFT_PART_INSTALL}/${JAVA_HOME}/bin`; do
+        ln -s --relative ${JAVA_HOME}/bin/${tool} usr/bin/
+      done
+      craftctl default
+
+  deb-security-manifest:
+    plugin: make
+    after:
+      - openjdk
+    source: https://github.com/canonical/rocks-security-manifest
+    source-type: git
+    source-branch: main
+    override-prime: |
+      gen_manifest
+      craftctl default
