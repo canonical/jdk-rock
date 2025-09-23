@@ -19,14 +19,21 @@ run-user: _daemon_
 parts:
   openjdk:
     plugin: nil
+    source:  https://github.com/vpa1977/chisel-releases
+    source-branch: openjdk_awt_slices
+    source-type: git
+    build-packages:
+      - openjdk-17-jdk
     override-build: |
-      chisel cut --root ${CRAFT_PART_INSTALL}/ \
+      chisel cut --release ./ --root ${CRAFT_PART_INSTALL}/ \
         openjdk-17-jdk-headless_standard \
         openjdk-17-jdk-headless_modules \
         openjdk-17-jdk-headless_headers \
         openjdk-17-jdk-headless_debug-headers \
+        openjdk-17-jre-headless_awt \
         base-files_chisel
-
+      mkdir -p ${CRAFT_PART_INSTALL}/etc/ssl/certs/java/
+      cp /etc/ssl/certs/java/cacerts ${CRAFT_PART_INSTALL}/etc/ssl/certs/java/
       JAVA_HOME=usr/lib/jvm/java-17-openjdk-${CRAFT_ARCH_BUILD_FOR}
       cd ${CRAFT_PART_INSTALL}
       mkdir -p usr/bin
