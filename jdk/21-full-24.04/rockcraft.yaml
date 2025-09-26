@@ -25,3 +25,14 @@ parts:
         ln -s --relative ${JAVA_HOME}/bin/${tool} usr/bin/
       done
       craftctl default
+
+  deb-security-manifest:
+    plugin: make
+    after:
+      - openjdk
+    source: https://github.com/canonical/rocks-security-manifest
+    source-type: git
+    source-branch: main
+    override-prime: |
+      gen_manifest
+      craftctl default
