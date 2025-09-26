@@ -4,7 +4,7 @@ base: ubuntu@24.04
 version: '8-full-24.04'
 summary: OpenJDK 8 on Ubuntu 24.04
 description: |
-  Ubuntu 24.04-based rock with openjdk-17-jdk package installed
+  Ubuntu 24.04-based rock with openjdk-8-jdk package installed
 platforms:
   amd64:
   arm64:
