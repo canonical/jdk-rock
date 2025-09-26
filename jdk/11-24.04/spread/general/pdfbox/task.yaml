@@ -1,0 +1,10 @@
+summary: validate awt application
+
+execute: |
+  docker build -t maven --build-arg ROCK=${ROCK} \
+    --build-arg TARGETARCH=$(dpkg --print-architecture) .
+  git clone -b 3.0.5-surefire https://github.com/vpa1977/pdfbox.git
+  cd pdfbox
+  docker run --rm -v `pwd`:/pdfbox --tmpfs /tmp:exec -u $(id -u) \
+     maven exec /bin/sh -c \
+      "cd /pdfbox && /usr/share/maven/bin/mvn -e -Dproject.build.directory=/tmp/build -Dmaven.repo.local=/tmp/.m2 package"
