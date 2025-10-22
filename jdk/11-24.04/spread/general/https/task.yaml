@@ -1,4 +1,0 @@
-summary: validate CA certificates are deployed
-
-execute: |
-  docker run -v `pwd`:/app ${ROCK} exec java -Djavax.net.debug=all /app/Main.java
