@@ -1,0 +1,71 @@
+name: jdk
+
+base: bare
+build-base: devel
+
+version: '25-26.04'
+summary: Chiselled OpenJDK 25 on Ubuntu 26.04
+description: |
+  Chiselled OpenJDK 25 rock
+platforms:
+  amd64:
+  arm64:
+
+environment:
+  JAVA_HOME: /usr/lib/jvm/java-25-openjdk-${CRAFT_ARCH_BUILD_FOR}
+
+run-user: _daemon_
+
+parts:
+  openjdk:
+    plugin: nil
+    build-packages:
+      - openjdk-25-jdk
+    stage-packages:
+      # Development rock slices
+      - apt_apt-get
+      - base-files_base
+      - base-files_release-info
+      - base-passwd_data
+      - bash_bins
+      - ca-certificates_data
+      - coreutils_bins
+      - debianutils_which
+      - findutils_bins
+      - grep_bins
+      - gzip_bins
+      - tar_bins
+      - wget_bins
+      - zstd_bins
+      - debianutils_run-parts
+      - libc-bin_getent
+      # OpenJDK slices
+      - openjdk-25-jdk-headless_standard
+      - openjdk-25-jdk-headless_modules
+      - openjdk-25-jdk-headless_headers
+      - openjdk-25-jdk-headless_debug-headers
+      - openjdk-25-jre-headless_awt
+      - ca-certificates-java_jars
+      # Chisel manifest
+      - base-files_chisel
+    override-build: |
+      mkdir -p ${CRAFT_PART_INSTALL}/etc/ssl/certs/java/
+      cp /etc/ssl/certs/java/cacerts ${CRAFT_PART_INSTALL}/etc/ssl/certs/java/
+      JAVA_HOME=usr/lib/jvm/java-25-openjdk-${CRAFT_ARCH_BUILD_FOR}
+      cd ${CRAFT_PART_INSTALL}
+      mkdir -p usr/bin
+      for tool in `ls ${CRAFT_PART_INSTALL}/${JAVA_HOME}/bin`; do
+        ln -s --relative ${JAVA_HOME}/bin/${tool} usr/bin/
+      done
+      craftctl default
+
+  deb-security-manifest:
+    plugin: make
+    after:
+      - openjdk
+    source: https://github.com/canonical/rocks-security-manifest
+    source-type: git
+    source-branch: main
+    override-prime: |
+      gen_manifest
+      craftctl default
