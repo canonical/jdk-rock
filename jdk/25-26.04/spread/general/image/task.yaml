@@ -1,0 +1,4 @@
+summary: validate awt works
+
+execute: |
+  docker run --tmpfs /tmp:exec -v `pwd`:/app ${ROCK} exec java /app/Main.java
