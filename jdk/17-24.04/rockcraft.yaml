@@ -27,7 +27,6 @@ parts:
       # Development rock slices
       - apt_apt-get
       - base-files_base
-      - base-files_chisel
       - base-files_release-info
       - base-passwd_data
       - bash_bins
