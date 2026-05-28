@@ -1,7 +1,7 @@
 name: jdk
 
 base: bare
-build-base: devel
+build-base: ubuntu@26.04
 
 version: '25-26.04'
 summary: Chiselled OpenJDK 25 on Ubuntu 26.04
