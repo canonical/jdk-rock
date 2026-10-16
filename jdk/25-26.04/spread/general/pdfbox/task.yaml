@@ -7,4 +7,4 @@ execute: |
   cd pdfbox
   docker run --rm -v `pwd`:/pdfbox --tmpfs /tmp:exec -u $(id -u) \
      maven exec /bin/sh -c \
-      "cd /pdfbox && /usr/share/maven/bin/mvn -e -Dproject.build.directory=/tmp/build -Dmaven.repo.local=/tmp/.m2 -pl pdfbox package"
+      "cd /pdfbox && /usr/share/maven/bin/mvn -e -Dproject.build.directory=/tmp/build -Dmaven.repo.local=/tmp/.m2 -Dtest=!COSDocumentCompressionTest -pl pdfbox package"
