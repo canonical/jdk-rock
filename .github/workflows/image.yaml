@@ -27,7 +27,7 @@ jobs:
         id: set-map
         run: |
           if [[ "${{ github.repository_owner }}" != "canonical" ]]; then
-            echo 'arch-map={"amd64":["ubuntu-24.04"],"arm64":["ubuntu-24.04-arm"]}' >> $GITHUB_OUTPUT
+            echo 'arch-map={"amd64":["ubuntu-24.04"],"arm64":["ubuntu-24.04-arm"],"ppc64el":["ubuntu-24.04-ppc64el"],"s390x":["ubuntu-24.04-s390x"]}' >> $GITHUB_OUTPUT
           fi
 
       # TODO: remove once the pro-feature is stable in rockcraft
@@ -84,7 +84,7 @@ jobs:
     runs-on: ubuntu-latest
     if: |
       needs.prepare.outputs.ghcr-upload == 'true' &&
-      github.event_name != 'pull_request' && 
+      github.event_name != 'pull_request' &&
       github.ref == 'refs/heads/main'
     strategy:
       matrix: ${{ fromJSON(needs.prepare.outputs.build-matrix) }}
@@ -96,7 +96,7 @@ jobs:
         if: ${{ github.event.repository.visibility == 'public' && matrix.pro-services != '' }}
         run: |
           echo "::warning::Uploading Pro enabled rocks to GHCR is not allowed for public repositories."
-      
+
       - name: Upload Rock to GHCR
         if: ${{ github.event.repository.visibility != 'public' || matrix.pro-services == '' }}
         uses: canonical/oci-factory/.github/actions/upload-rock@main
@@ -115,7 +115,7 @@ jobs:
     runs-on: ubuntu-latest
     if: |
       needs.prepare.outputs.upload-matrix != '{"include": []}' &&
-      github.event_name != 'pull_request' && 
+      github.event_name != 'pull_request' &&
       github.ref == 'refs/heads/main'
     strategy:
       matrix: ${{ fromJSON(needs.prepare.outputs.upload-matrix) }}

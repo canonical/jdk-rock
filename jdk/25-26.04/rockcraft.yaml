@@ -10,6 +10,8 @@ description: |
 platforms:
   amd64:
   arm64:
+  s390x:
+  ppc64el:
 
 environment:
   JAVA_HOME: /usr/lib/jvm/java-25-openjdk-${CRAFT_ARCH_BUILD_FOR}
